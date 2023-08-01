@@ -1,0 +1,37 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AttackScript : MonoBehaviour
+{
+    [SerializeField] private float attackCooldown;
+    private Animator animator;
+    private PlayerMovement playerMovement;
+    private float cooldownTimer;
+
+    
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        playerMovement = GetComponent<PlayerMovement>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButton(0) && playerMovement.grounded)
+            Attack();
+
+        cooldownTimer = Time.deltaTime;
+
+
+    }
+
+    private void Attack()
+    {
+        animator.SetTrigger("attack");
+        cooldownTimer = 0;
+    }
+
+
+}
