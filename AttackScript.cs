@@ -9,8 +9,6 @@ public class AttackScript : MonoBehaviour
     private PlayerMovement playerMovement;
     private float cooldownTimer;
 
-    
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -19,19 +17,19 @@ public class AttackScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && playerMovement.grounded)
+        // Increase cooldownTimer by Time.deltaTime
+        cooldownTimer += Time.deltaTime;
+
+        // Check if the attack button is pressed, player is grounded, and cooldownTimer has reached attackCooldown
+        if (Input.GetMouseButton(0) && playerMovement.grounded && cooldownTimer >= attackCooldown)
+        {
             Attack();
-
-        cooldownTimer = Time.deltaTime;
-
-
+        }
     }
 
     private void Attack()
     {
         animator.SetTrigger("attack");
-        cooldownTimer = 0;
+        cooldownTimer = 0; // Reset cooldownTimer to zero after the attack
     }
-
-
 }
