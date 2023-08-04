@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
         // Flip character
         if (moveHorizontal < 0f)
             transform.localScale = new Vector3(-1, 1, 1);
-         
+
         if (moveHorizontal > 0f)
             transform.localScale = new Vector3(1, 1, 1);
 
@@ -80,4 +80,3 @@ public class PlayerMovement : MonoBehaviour
 
 
 }
-
