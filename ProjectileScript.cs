@@ -17,24 +17,23 @@ public class ProjectileScript : MonoBehaviour
     private void Awake()
     {  
         animator = GetComponent<Animator>();
+
+        // Get Player Location
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        direction = Mathf.Sign(playerTransform.localScale.x);
+
+        // Direction of the projectile
+        transform.localScale = new Vector3(direction * 0.8f, 0.8f, 1);
+
     }
 
     private void Update()
     {
         if (hit) return;
 
-        // Get Player Location
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        direction = Mathf.Sign(playerTransform.localScale.x);
-
         // Move projectile
         Vector2 bulletMovement = new Vector2(speed * Time.deltaTime * direction, 0f);
         transform.Translate(bulletMovement);
-
-        // Direction of the projectile
-        transform.localScale = new Vector3(direction * 0.8f, 0.8f, 1);
-
-
 
         // After 8 seconds, destroy projectile.
         projectileTimer += Time.deltaTime;
