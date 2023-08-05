@@ -52,7 +52,6 @@ public class AttackScript : MonoBehaviour
         cooldownTimer2 = 0;
 
         Instantiate(fireball, firePoint.position, firePoint.rotation);
-        
     }
     
 
