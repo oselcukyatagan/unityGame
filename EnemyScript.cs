@@ -37,5 +37,4 @@ public class EnemyScript : MonoBehaviour
         enemyAnimator.SetTrigger("EnemyDieTrigger");
     }
 
-
 }
