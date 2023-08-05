@@ -8,11 +8,15 @@ public class EnemyScript : MonoBehaviour
     public Animator enemyAnimator;
     public Rigidbody2D enemyBody;
 
+    private float animationTime = 1.4f;
+
     private void Awake()
     {
         enemyAnimator = GetComponent<Animator>();
         enemyBody = GetComponent<Rigidbody2D>();
     }
+
+
 
     private void Update()
     {
@@ -29,7 +33,9 @@ public class EnemyScript : MonoBehaviour
 
     private void Die()
     {
-        Destroy(gameObject);
+        Destroy(gameObject, animationTime);
+        enemyAnimator.SetTrigger("EnemyDieTrigger");
     }
+
 
 }
