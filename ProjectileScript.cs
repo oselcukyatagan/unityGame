@@ -14,6 +14,8 @@ public class ProjectileScript : MonoBehaviour
     public float direction;
     public float projectileTimer;
 
+    public float damage = 50;
+
     private void Awake()
     {  
         animator = GetComponent<Animator>();
@@ -41,12 +43,22 @@ public class ProjectileScript : MonoBehaviour
         if (projectileTimer > 8f)
             handleProjectile();
 
+        
+
 
     }
 
     // When object hits something, this function is called.
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log(collision.name);
+
+        EnemyScript enemyScript = collision.GetComponent<EnemyScript>();
+
+        if (enemyScript != null)
+            enemyScript.enemyTakeDamage(damage);
+
+
         hit = true;
         animator.SetTrigger("fireballExplode");
         Destroy(gameObject, time);
