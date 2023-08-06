@@ -6,8 +6,9 @@ public class PlayerGetAffected : MonoBehaviour
 
     public float playerHealth = 100;
     public Animator playerAnimator;
-    
 
+    public bool playerDead = false;
+    public GameManagerScript gameManager;
 
     private void Awake()
     {
@@ -24,13 +25,18 @@ public class PlayerGetAffected : MonoBehaviour
     {
         playerHealth -= damage;
 
-        if (playerHealth<= 0)
-            enemyDie();
+        if (playerHealth <= 0 && !playerDead)
+            playerDie();
     }
 
-    private void enemyDie() 
+    private void playerDie() 
     {
         playerAnimator.SetTrigger("playerDieTrigger");
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 1.4f);
+
+        playerDead = true;
+        gameManager.GameOver();
+
+        
     }
 }
