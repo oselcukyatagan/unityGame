@@ -15,6 +15,17 @@ public class EnemyScript : MonoBehaviour
 
     private float animationTime = 1.4f;
 
+    public Transform enemyFirePoint;
+    public GameObject fireball;
+
+    public float fireCoolDown = 1;
+    private float timer;
+
+    public bool enemyWalking = false;
+    public bool grounded = true;
+
+    private bool enemyDead = false;
+    public GameManagerScript gameManager;
 
     private void Awake()
     {
@@ -27,13 +38,19 @@ public class EnemyScript : MonoBehaviour
     private void Update()
     {
         EnemyMovement();
+
+        if (Input.GetKey(KeyCode.DownArrow) && timer >= fireCoolDown)
+            EnemyFire();
+
+        timer += Time.deltaTime;
+        enemyAnimator.SetBool("enemyGroundedBool", grounded);
     }
 
     public void enemyTakeDamage(float damage)
     {
         enemyHealth -= damage;
 
-        if (enemyHealth <= 0)
+        if (enemyHealth <= 0 && !enemyDead)
             Die();
     }
 
@@ -41,10 +58,15 @@ public class EnemyScript : MonoBehaviour
     {
         Destroy(gameObject, animationTime);
         enemyAnimator.SetTrigger("EnemyDieTrigger");
+        enemyDead = true;
+        gameManager.GameOver();
+        
     }
 
     private void EnemyMovement()
     {
+
+        // Calculate position and direction
         horizontalMovement = 0;
 
         if (Input.GetKey(KeyCode.LeftArrow))
@@ -58,10 +80,24 @@ public class EnemyScript : MonoBehaviour
             transform.localScale = new Vector3(1, 1, 1);
 
 
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow) && grounded)
+        {
             enemyBody.velocity = new Vector2(0, jumpStrength);
-            
+            grounded = false;
+            enemyAnimator.SetTrigger("enemyJumpTrigger");
+        }
 
+
+        // Animation
+        if (horizontalMovement == 0)
+            enemyWalking = false;
+        else
+            enemyWalking = true;
+
+        enemyAnimator.SetBool("enemyWalkingBool", enemyWalking);
+
+
+        // Move
 
         Vector2 move = new Vector2(speed * horizontalMovement * Time.deltaTime, 0);
 
@@ -71,6 +107,19 @@ public class EnemyScript : MonoBehaviour
 
     }
 
+    private void EnemyFire()
+    {
+        enemyAnimator.SetTrigger("enemyFireTrigger");
 
+        Instantiate(fireball, enemyFirePoint.position, enemyFirePoint.rotation);
+
+        timer = 0;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+            grounded = true;
+    }
 
 }
